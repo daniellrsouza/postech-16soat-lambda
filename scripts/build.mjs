@@ -16,6 +16,7 @@ for (const funcao of funcoes) {
     target: "node22",
     format: "cjs",
     minify: true,
+    keepNames: true,
     sourcemap: false,
     // Dependência opcional do pg, não usada.
     external: ["pg-native"],

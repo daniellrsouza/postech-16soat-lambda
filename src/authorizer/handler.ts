@@ -36,7 +36,9 @@ export function criarAuthorizer(segredoJwt: () => string) {
     } catch (erro) {
       log.warn("token rejeitado", {
         routeKey: event.routeKey,
-        reason: erro instanceof Error ? erro.name : "desconhecido",
+        // jose expõe um código estável (ex.: ERR_JWT_EXPIRED); o nome da
+        // classe não serve, porque o bundle é minificado.
+        reason: (erro as { code?: string }).code ?? (erro instanceof Error ? erro.message : "desconhecido"),
       });
       return { isAuthorized: false, context: {} };
     }

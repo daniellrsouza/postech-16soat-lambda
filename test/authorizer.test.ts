@@ -1,6 +1,6 @@
 import type { APIGatewayRequestAuthorizerEventV2 } from "aws-lambda";
 import { SignJWT } from "jose";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { criarAuthorizer } from "../src/authorizer/handler";
 import { emitirTokenCliente } from "../src/shared/jwt";
 
@@ -57,8 +57,25 @@ describe("Lambda Authorizer", () => {
     expect((await authorizer(evento(`Bearer ${token}`))).isAuthorized).toBe(false);
   });
 
-  it("nega token expirado", async () => {
+  it("nega token expirado e registra o motivo pelo código do jose", async () => {
+    const warn = vi.spyOn(console, "log").mockImplementation(() => {});
     const token = await emitirTokenCliente(CLIENTE_ID, SEGREDO, new Date(Date.now() - 2 * 3600 * 1000));
     expect((await authorizer(evento(`Bearer ${token}`))).isAuthorized).toBe(false);
+    const linha = JSON.parse(String(warn.mock.calls.at(-1)?.[0]));
+    expect(linha).toMatchObject({ level: "WARN", message: "token rejeitado", reason: "ERR_JWT_EXPIRED" });
+    warn.mockRestore();
+  });
+
+  it("registra a mensagem quando o erro não tem código", async () => {
+    const warn = vi.spyOn(console, "log").mockImplementation(() => {});
+    const semRole = await new SignJWT({})
+      .setProtectedHeader({ alg: "HS256" })
+      .setSubject(CLIENTE_ID)
+      .setIssuer("tech-challenge-auth")
+      .setExpirationTime("1h")
+      .sign(new TextEncoder().encode(SEGREDO));
+    expect((await authorizer(evento(`Bearer ${semRole}`))).isAuthorized).toBe(false);
+    expect(JSON.parse(String(warn.mock.calls.at(-1)?.[0])).reason).toBe("token sem sub ou role");
+    warn.mockRestore();
   });
 });
