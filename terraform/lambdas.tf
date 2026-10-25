@@ -2,12 +2,16 @@ data "archive_file" "auth_cpf" {
   type        = "zip"
   source_dir  = "${var.dist_dir}/auth-cpf"
   output_path = "${path.module}/build/auth-cpf.zip"
+  # Mesmo modo no Windows e no Linux do CI: o hash do pacote não muda à toa.
+  output_file_mode = "0644"
 }
 
 data "archive_file" "authorizer" {
   type        = "zip"
   source_dir  = "${var.dist_dir}/authorizer"
   output_path = "${path.module}/build/authorizer.zip"
+  # Mesmo modo no Windows e no Linux do CI: o hash do pacote não muda à toa.
+  output_file_mode = "0644"
 }
 
 resource "aws_cloudwatch_log_group" "auth_cpf" {
