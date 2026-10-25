@@ -1,0 +1,40 @@
+{
+  "name": "postech-16soat-lambda",
+  "version": "1.0.0",
+  "description": "Autenticacao por CPF (AWS Lambda) e Lambda Authorizer do API Gateway - Tech Challenge Fase 3",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "build": "node scripts/build.mjs",
+    "ci": "npm run typecheck && npm run test:coverage && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daniellrsouza/postech-16soat-lambda.git"
+  },
+  "bugs": {
+    "url": "https://github.com/daniellrsouza/postech-16soat-lambda/issues"
+  },
+  "homepage": "https://github.com/daniellrsouza/postech-16soat-lambda#readme",
+  "dependencies": {
+    "jose": "^6.2.13",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.164",
+    "@types/node": "^22.20.5",
+    "@types/pg": "^8.23.1",
+    "@vitest/coverage-v8": "^5.0.5",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  }
+}
