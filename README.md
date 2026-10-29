@@ -1,6 +1,6 @@
 # postech-16soat-lambda
 
-Function Serverless de **autenticação por CPF** do Tech Challenge (FIAP/SOAT, Grupo 15, Fase 3),
+Function Serverless de **autenticação por CPF** do Tech Challenge (FIAP/SOAT, Fase 3),
 o **Lambda Authorizer** que protege as rotas sensíveis no API Gateway e o Terraform das funções e
 das rotas de cada ambiente (`homolog` e `prod`).
 
